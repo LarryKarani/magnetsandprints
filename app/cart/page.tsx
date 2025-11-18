@@ -143,23 +143,23 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-6 md:py-12">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-6xl mx-auto"
         >
-          <h1 className="text-4xl font-bold text-center mb-8">Your Cart</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-6 md:mb-8">Your Cart</h1>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => (
                 <Card key={item.id}>
-                  <CardContent className="p-6">
-                    <div className="flex gap-6">
-                      <div className="relative w-32 h-32 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex gap-3 md:gap-6">
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                         <Image
                           src={item.imageUrl}
                           alt="Magnet preview"
@@ -167,32 +167,36 @@ export default function CartPage() {
                           className="object-cover"
                         />
                       </div>
-                      <div className="flex-grow">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className="font-semibold text-lg mb-1">
+                      <div className="flex-grow min-w-0">
+                        <div className="flex justify-between items-start mb-3 md:mb-4">
+                          <div className="flex-grow min-w-0 pr-2">
+                            <h3 className="font-semibold text-base md:text-lg mb-1 truncate">
                               Custom Magnet
                             </h3>
-                            <p className="text-sm text-gray-600">
-                              Size: {item.size} | Border: {item.borderStyle} | Finish:{" "}
-                              {item.finish}
-                            </p>
+                            <div className="text-xs sm:text-sm text-gray-600 space-y-1">
+                              <p>Size: {item.size}</p>
+                              <p className="hidden sm:inline">Border: {item.borderStyle} | Finish: {item.finish}</p>
+                              <p className="sm:hidden">Border: {item.borderStyle}</p>
+                              <p className="sm:hidden">Finish: {item.finish}</p>
+                            </div>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="flex-shrink-0 h-8 w-8"
                             onClick={() => removeItem(item.id)}
                           >
                             <Trash2 className="w-4 h-4 text-red-500" />
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Label className="text-sm">Quantity:</Label>
-                            <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <Label className="text-xs sm:text-sm">Qty:</Label>
+                            <div className="flex items-center gap-1 sm:gap-2">
                               <Button
                                 variant="outline"
                                 size="sm"
+                                className="h-8 w-8 p-0"
                                 onClick={() =>
                                   updateQuantity(
                                     item.id,
@@ -202,12 +206,13 @@ export default function CartPage() {
                               >
                                 -
                               </Button>
-                              <span className="w-8 text-center">
+                              <span className="w-8 text-center text-sm">
                                 {item.quantity}
                               </span>
                               <Button
                                 variant="outline"
                                 size="sm"
+                                className="h-8 w-8 p-0"
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
@@ -216,7 +221,7 @@ export default function CartPage() {
                               </Button>
                             </div>
                           </div>
-                          <p className="font-bold text-lg">
+                          <p className="font-bold text-base md:text-lg">
                             {formatPrice(item.price)}
                           </p>
                         </div>
@@ -228,29 +233,30 @@ export default function CartPage() {
             </div>
 
             {/* Checkout Form */}
-            <div>
-              <Card className="sticky top-4">
-                <CardHeader>
-                  <CardTitle>Checkout Details</CardTitle>
+            <div className="lg:sticky lg:top-4">
+              <Card>
+                <CardHeader className="p-4 md:p-6">
+                  <CardTitle className="text-lg md:text-xl">Checkout Details</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 p-4 md:p-6">
                   {/* Customer Information */}
                   <div>
-                    <h3 className="font-semibold mb-3">Contact Information</h3>
+                    <h3 className="font-semibold mb-3 text-sm md:text-base">Contact Information</h3>
                     <div className="space-y-3">
                       <div>
-                        <Label htmlFor="name">Full Name *</Label>
+                        <Label htmlFor="name" className="text-xs md:text-sm">Full Name *</Label>
                         <Input
                           id="name"
                           name="name"
                           value={userDetails.name}
                           onChange={handleInputChange}
                           placeholder="John Doe"
+                          className="h-10 text-sm"
                           required
                         />
                       </div>
                       <div>
-                        <Label htmlFor="email">Email *</Label>
+                        <Label htmlFor="email" className="text-xs md:text-sm">Email *</Label>
                         <Input
                           id="email"
                           name="email"
@@ -258,11 +264,12 @@ export default function CartPage() {
                           value={userDetails.email}
                           onChange={handleInputChange}
                           placeholder="john@example.com"
+                          className="h-10 text-sm"
                           required
                         />
                       </div>
                       <div>
-                        <Label htmlFor="phone">Phone *</Label>
+                        <Label htmlFor="phone" className="text-xs md:text-sm">Phone *</Label>
                         <Input
                           id="phone"
                           name="phone"
@@ -270,6 +277,7 @@ export default function CartPage() {
                           value={userDetails.phone}
                           onChange={handleInputChange}
                           placeholder="+971 50 123 4567"
+                          className="h-10 text-sm"
                           required
                         />
                       </div>
@@ -280,67 +288,72 @@ export default function CartPage() {
 
                   {/* Shipping Address */}
                   <div>
-                    <h3 className="font-semibold mb-3">Shipping Address</h3>
+                    <h3 className="font-semibold mb-3 text-sm md:text-base">Shipping Address</h3>
                     <div className="space-y-3">
                       <div>
-                        <Label htmlFor="address">Street Address *</Label>
+                        <Label htmlFor="address" className="text-xs md:text-sm">Street Address *</Label>
                         <Input
                           id="address"
                           name="address"
                           value={userDetails.address}
                           onChange={handleInputChange}
                           placeholder="123 Main St"
+                          className="h-10 text-sm"
                           required
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <Label htmlFor="city">City *</Label>
+                          <Label htmlFor="city" className="text-xs md:text-sm">City *</Label>
                           <Input
                             id="city"
                             name="city"
                             value={userDetails.city}
                             onChange={handleInputChange}
                             placeholder="Dubai"
+                            className="h-10 text-sm"
                             required
                           />
                         </div>
                         <div>
-                          <Label htmlFor="state">State/Emirate</Label>
+                          <Label htmlFor="state" className="text-xs md:text-sm">State/Emirate</Label>
                           <Input
                             id="state"
                             name="state"
                             value={userDetails.state}
                             onChange={handleInputChange}
                             placeholder="Dubai"
+                            className="h-10 text-sm"
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <Label htmlFor="zipCode">Zip Code</Label>
+                          <Label htmlFor="zipCode" className="text-xs md:text-sm">Zip Code</Label>
                           <Input
                             id="zipCode"
                             name="zipCode"
                             value={userDetails.zipCode}
                             onChange={handleInputChange}
                             placeholder="12345"
+                            className="h-10 text-sm"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="country">Country *</Label>
+                          <Label htmlFor="country" className="text-xs md:text-sm">Country *</Label>
                           <Input
                             id="country"
                             name="country"
                             value={userDetails.country}
                             onChange={handleInputChange}
                             placeholder="UAE"
+                            className="h-10 text-sm"
                             required
                           />
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="specialInstructions">
+                        <Label htmlFor="specialInstructions" className="text-xs md:text-sm">
                           Special Instructions (Optional)
                         </Label>
                         <textarea
@@ -349,7 +362,7 @@ export default function CartPage() {
                           value={userDetails.specialInstructions}
                           onChange={handleInputChange}
                           placeholder="Any special requests?"
-                          className="w-full px-3 py-2 border rounded-md resize-none"
+                          className="w-full px-3 py-2 border rounded-md resize-none text-sm"
                           rows={3}
                         />
                       </div>
@@ -360,8 +373,8 @@ export default function CartPage() {
 
                   {/* Order Summary */}
                   <div>
-                    <h3 className="font-semibold mb-3">Order Summary</h3>
-                    <div className="space-y-2 text-sm">
+                    <h3 className="font-semibold mb-3 text-sm md:text-base">Order Summary</h3>
+                    <div className="space-y-2 text-xs sm:text-sm">
                       <div className="flex justify-between">
                         <span>Subtotal ({items.length} items)</span>
                         <span>{formatPrice(getTotalPrice())}</span>
@@ -371,7 +384,7 @@ export default function CartPage() {
                         <span className="text-green-600">FREE</span>
                       </div>
                       <Separator />
-                      <div className="flex justify-between font-bold text-lg">
+                      <div className="flex justify-between font-bold text-base md:text-lg">
                         <span>Total</span>
                         <span>{formatPrice(getTotalPrice())}</span>
                       </div>
@@ -379,7 +392,7 @@ export default function CartPage() {
                   </div>
 
                   <Button
-                    className="w-full"
+                    className="w-full h-11 md:h-12 text-sm md:text-base"
                     size="lg"
                     onClick={handleCheckout}
                     disabled={isProcessing}
