@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     const { order, user } = await request.json();
@@ -15,6 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const notificationEmail = process.env.ORDER_NOTIFICATION_EMAIL;
+    const resendApiKey = process.env.RESEND_API_KEY;
 
     if (!notificationEmail) {
       return NextResponse.json(
@@ -22,6 +21,16 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    if (!resendApiKey) {
+      return NextResponse.json(
+        { error: 'Resend API key not configured' },
+        { status: 500 }
+      );
+    }
+
+    // Initialize Resend only when needed
+    const resend = new Resend(resendApiKey);
 
     // Send notification to store owner
     const data = await resend.emails.send({
