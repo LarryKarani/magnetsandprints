@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { OrderStatus, PaymentStatus } from '@prisma/client';
 
 // Simple auth check
 function isAuthenticated(request: NextRequest): boolean {
@@ -61,9 +62,12 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const updateData: any = {};
-    if (status) updateData.status = status;
-    if (paymentStatus) updateData.paymentStatus = paymentStatus;
+    const updateData: {
+      status?: OrderStatus;
+      paymentStatus?: PaymentStatus;
+    } = {};
+    if (status) updateData.status = status as OrderStatus;
+    if (paymentStatus) updateData.paymentStatus = paymentStatus as PaymentStatus;
 
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },

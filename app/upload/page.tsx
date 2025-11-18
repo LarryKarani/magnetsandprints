@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Upload, X, Image as ImageIcon, ZoomIn } from "lucide-react";
+import { Upload, X, ZoomIn } from "lucide-react";
 import toast from "react-hot-toast";
 import { useCartStore } from "@/lib/store";
 

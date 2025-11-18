@@ -63,7 +63,13 @@ export async function POST(request: NextRequest) {
 
           <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3>Order Items (${order.items.length})</h3>
-            ${order.items.map((item: any) => `
+            ${order.items.map((item: {
+              size: string;
+              quantity: number;
+              borderStyle: string;
+              finish: string;
+              price: number;
+            }) => `
               <div style="border-bottom: 1px solid #d1d5db; padding: 10px 0;">
                 <p><strong>Size:</strong> ${item.size}</p>
                 <p><strong>Quantity:</strong> ${item.quantity}</p>
@@ -84,7 +90,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to send notification' },
       { status: 500 }

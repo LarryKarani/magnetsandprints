@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const orders = await prisma.order.findMany({
       include: {
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json(orders)
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch orders' },
       { status: 500 }

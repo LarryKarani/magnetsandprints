@@ -93,7 +93,7 @@ export default function AboutPage() {
               About Magnets & Prints
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              We're passionate about helping you preserve and display your
+              We&apos;re passionate about helping you preserve and display your
               favorite memories. Our mission is to make it easy and affordable
               to turn your photos into beautiful, high-quality magnets.
             </p>
@@ -149,10 +149,10 @@ export default function AboutPage() {
                 bring those photos into the physical world.
               </p>
               <p>
-                Today, we're proud to have helped thousands of customers
-                preserve and display their favorite moments. Whether it's family
+                Today, we&apos;re proud to have helped thousands of customers
+                preserve and display their favorite moments. Whether it&apos;s family
                 photos on the fridge, pet pictures in the office, or vacation
-                memories as gifts, we're here to help you celebrate what matters
+                memories as gifts, we&apos;re here to help you celebrate what matters
                 most.
               </p>
             </div>

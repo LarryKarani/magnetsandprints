@@ -16,7 +16,7 @@ import { formatPrice } from "@/lib/utils";
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, removeItem, updateQuantity, getTotalPrice, clearCart } =
+  const { items, removeItem, updateQuantity, getTotalPrice } =
     useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
 

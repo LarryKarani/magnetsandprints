@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!ziinaResponse.ok) {
-      const errorData = await ziinaResponse.json();
+      await ziinaResponse.json();
       return NextResponse.json(
         { error: 'Failed to create payment with Ziina' },
         { status: 500 }
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       paymentUrl: paymentData.redirect_url,
       embeddedUrl: paymentData.embedded_url,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create payment' },
       { status: 500 }
