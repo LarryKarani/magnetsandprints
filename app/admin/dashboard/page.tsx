@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import toast from "react-hot-toast";
 import { formatPrice } from "@/lib/utils";
-import { LogOut, Package, DollarSign, Users, TrendingUp } from "lucide-react";
+import { LogOut, Package, DollarSign, Users, TrendingUp, Download, Printer } from "lucide-react";
 
 interface OrderItem {
   id: string;
@@ -147,6 +147,77 @@ export default function AdminDashboardPage() {
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     router.push("/admin/login");
+  };
+
+  const handleDownloadImage = async (imageUrl: string, orderNumber: string, itemIndex: number) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${orderNumber}_item_${itemIndex + 1}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Image downloaded successfully");
+    } catch {
+      toast.error("Failed to download image");
+    }
+  };
+
+  const handlePrintImage = (imageUrl: string) => {
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Print Image</title>
+            <style>
+              body {
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+              }
+              img {
+                max-width: 100%;
+                height: auto;
+              }
+              @media print {
+                body {
+                  padding: 0;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${imageUrl}" onload="window.print(); window.close();" />
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+
+  const handleDownloadAllImages = async (order: Order) => {
+    try {
+      for (let i = 0; i < order.items.length; i++) {
+        const item = order.items[i];
+        await handleDownloadImage(item.imageUrl, order.orderNumber, i);
+        // Add a small delay between downloads to avoid browser blocking
+        if (i < order.items.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+      toast.success(`Downloaded all ${order.items.length} images`);
+    } catch {
+      toast.error("Failed to download all images");
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -459,9 +530,19 @@ export default function AdminDashboardPage() {
 
               {/* Order Items */}
               <div>
-                <h3 className="font-semibold mb-2">Order Items</h3>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold">Order Items</h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownloadAllImages(selectedOrder)}
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    Download All ({selectedOrder.items.length})
+                  </Button>
+                </div>
                 <div className="space-y-3">
-                  {selectedOrder.items.map((item) => (
+                  {selectedOrder.items.map((item, index) => (
                     <div
                       key={item.id}
                       className="flex gap-4 bg-gray-50 p-4 rounded-lg"
@@ -481,6 +562,24 @@ export default function AdminDashboardPage() {
                           Finish: {item.finish}
                         </p>
                         <p className="text-sm">Quantity: {item.quantity}</p>
+                        <div className="flex gap-2 mt-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDownloadImage(item.imageUrl, selectedOrder.orderNumber, index)}
+                          >
+                            <Download className="w-3 h-3 mr-1" />
+                            Download
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handlePrintImage(item.imageUrl)}
+                          >
+                            <Printer className="w-3 h-3 mr-1" />
+                            Print
+                          </Button>
+                        </div>
                       </div>
                       <div className="text-right">
                         <p className="font-bold">{formatPrice(item.price)}</p>
